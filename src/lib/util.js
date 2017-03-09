@@ -14,19 +14,21 @@ export function joinpath (...args) {
     if (!p || p === '') {
       continue
     }
-/*
     if (p.match(/^([a-z]+:|\/)/)) {
-      // absolute.
+      // starts with method: or /
+      if (ret.length > 0 && ret[0].match(/^[a-z]+:/)) {
+        ret.splice(1)
+      } else {
+        ret = []
+      }
+    }
+    if (ret.length > 0) {
+      p = p.replace(/^\/+/, '')
+    }
+    if (a < args.length - 1) {
       p = p.replace(/\/+$/, '')
-      ret = []
-    } else {
-      p = p.replace(/^\/+/, '').replace(/\/+$/, '')
     }
-*/
-    p = p.replace(/^\/+/, '').replace(/\/+$/, '')
-    if (p !== '') {
-      ret.push(p)
-    }
+    ret.push(p)
   }
   return ret.join('/')
 }

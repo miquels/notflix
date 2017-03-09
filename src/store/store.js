@@ -57,7 +57,7 @@ const mutations = {
 const actions = {
   LOAD_CONFIG (context) {
     let dev = process.env.NODE_ENV !== 'production'
-    let cfgurl = dev ? '/static/config.json' : 'config.json'
+    let cfgurl = dev ? '/static/config.json' : '/config.json'
     return fetch(cfgurl, {
       redirect: 'follow'
     }).then((resp) => {
