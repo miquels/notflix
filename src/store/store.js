@@ -7,7 +7,10 @@ Vue.use(Vuex)
 var Store = {}
 
 const state = {
-  apiURL: 'http://localhost:8040/',
+  config: {
+    server: 'http://localhost:8040/'
+  },
+  apiURL: null,
   api: null,
   media: {},
   sidebar: false,
@@ -27,7 +30,6 @@ const mutations = {
     state.fullscreen = data
   },
   POSTER_SIZE (state, size) {
-    console.log('STORE: set poster size to', size)
     state.posterSize = size
   },
   POSTER_HOVER (state, obj) {
@@ -44,11 +46,29 @@ const mutations = {
   },
   VIDEO_PLAYING (state, flag) {
     state.videoPlaying = flag
+  },
+  SAVE_CONFIG (state, config) {
+    state.config = config
+    state.apiURL = config.server
   }
 }
 
 // actions: asynchronous changes.
 const actions = {
+  LOAD_CONFIG (context) {
+    let dev = process.env.NODE_ENV !== 'production'
+    let cfgurl = dev ? '/static/config.json' : 'config.json'
+    return fetch(cfgurl, {
+      redirect: 'follow'
+    }).then((resp) => {
+      if (!resp.ok) {
+        throw new RangeError('unexpected HTTP code ' + resp.status)
+      }
+      return resp.json()
+    }).then((json) => {
+      context.commit('SAVE_CONFIG', json)
+    })
+  }
 }
 
 Store = new Vuex.Store({

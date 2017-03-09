@@ -1,0 +1,5 @@
+{
+  "comment1": "set to '/' when the API server is also the main webserver",
+  "comment2": "or to a remote URL when they aren't the same",
+  "server": "http://localhost:8040/"
+}

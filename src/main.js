@@ -31,10 +31,14 @@ var router = new VueRouter({
   ]
 })
 
-/* eslint-disable no-new */
-new Vue({
-  el: '#app',
-  store,
-  router,
-  render: h => h(App)
+store.dispatch('LOAD_CONFIG').then((res) => {
+  console.log('result:', res)
+  /* eslint-disable no-new */
+  new Vue({
+    el: '#app',
+    store,
+    router,
+    render: h => h(App)
+  })
 })
+
