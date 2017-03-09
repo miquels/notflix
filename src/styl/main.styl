@@ -1,0 +1,72 @@
+@import '../../node_modules/vuetify/src/stylus/settings/_colors'
+
+// set inverse theme.
+$color-root := #FFFFFF
+$body-bg := $grey.darken-4
+$theme := {
+  primary: $blue.base,
+  accent: $blue.accent-1,
+  secondary: #181818,
+  info: $blue.base,
+  warning: $amber.base,
+  error: $red.base,
+  success: $green.base
+}
+$sidebar-item-color := #aaaaaa
+
+// set sidebar width a bit lower.
+$sidebar-width := 200px
+
+@import '../../node_modules/vuetify/src/stylus/main'
+
+// let content div have standard (inverse) background.
+.content
+  background: $body-bg
+
+// sidebar adjustments.
+.sidebar
+    font-size: 12px
+    padding-left: 6px
+
+// sidebar item highlist on hover.
+.sidebar a.list__tile:hover
+    background-color: black
+    color: white
+
+// toolbar colors and hover colors.
+.toolbar
+    background-color: black
+.toolbar button
+  color: #aaa
+.toolbar button:hover
+    background-color: #222
+    color: white
+
+// different font for toolbar title.
+.toolbar .toolbar__title
+    font-family: 'Wellfleet', serif
+
+// inverse menus.
+.menu__content
+    background: #424242
+    box-shadow: 0 3px 6px rgba(234, 227, 227, 0.16), 0 3px 6px rgba(234, 227, 227, 0.23)
+.menu__content a.list__tile
+    color: #bbb
+.menu__content a.list__tile:hover
+    background: #000000
+    color: #fff
+
+// override transitions for color in some places.
+// for some reason can't use the word 'transition' in stylus here
+// use standard CSS for now.
+@css {
+  .toolbar button {
+    transition: color 0s;
+  }
+  .sidebar a.list__tile {
+    transition: color 0s;
+  }
+  .menu__content a.list__tile {
+    transition: color 0s;
+  }
+}
