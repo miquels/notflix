@@ -164,14 +164,7 @@ func OpenSub(rw http.ResponseWriter, rq *http.Request, name string) (file http.F
 	subs, isUTF8 := parseSrt(srtFile)
 	charset := "charset=ISO-8859-1"
 	if isUTF8 {
-		charset = "charset=UTF-8"
-	}
-
-	if ext == "srt" {
-		rw.Header().Set("Content-Type", "text/plain; " + charset)
-		srtFile.Seek(0, 0)
-		file = srtFile
-		return
+		charset = "charset=utf-8"
 	}
 
 	accept := rq.Header.Get("Accept")
@@ -183,6 +176,13 @@ func OpenSub(rw http.ResponseWriter, rq *http.Request, name string) (file http.F
 		}
 		file = NewBlobBytesReader(jsonBytes, srtFile)
 		srtFile.Close()
+		return
+	}
+
+	if ext == "srt" && !strings.Contains(accept, "text/vtt") {
+		rw.Header().Set("Content-Type", "text/plain; " + charset)
+		srtFile.Seek(0, 0)
+		file = srtFile
 		return
 	}
 
