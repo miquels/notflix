@@ -93,6 +93,7 @@ export default {
     store.commit('API', Object.freeze(api))
   },
   mounted () {
+    document.getElementById('initialLoadingDiv').style.display = 'none'
     document.addEventListener('fullscreenchange', this.fullScreenChanged)
     document.addEventListener('webkitfullscreenchange', this.fullScreenChanged)
     document.addEventListener('mozfullscreenchange', this.fullScreenChanged)

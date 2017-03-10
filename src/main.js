@@ -32,7 +32,6 @@ var router = new VueRouter({
 })
 
 store.dispatch('LOAD_CONFIG').then((res) => {
-  console.log('result:', res)
   /* eslint-disable no-new */
   new Vue({
     el: '#app',
