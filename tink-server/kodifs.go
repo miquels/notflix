@@ -17,8 +17,8 @@ var isVideo = regexp.MustCompile(`^(.*)\.(divx|mov|mp4|MP4|m4u|m4v)$`)
 var isImage = regexp.MustCompile(`^(.+)\.(jpg|jpeg|png|tbn)$`)
 var isSeasonImg = regexp.MustCompile(`^season([0-9]+)-?([a-z]+|)\.(jpg|jpeg|png|tbn)$`)
 var isShowSubdir = regexp.MustCompile(`^S([0-9]+)|Specials([0-9]*)$`)
-var isExt1 = regexp.MustCompile(`^(.*)()\.(png|jpg|jpeg|tbn|nfo|srt)`)
-var isExt2 = regexp.MustCompile(`^(.*)[.-]([a-z]+)\.(png|jpg|jpeg|tbn|nfo|srt)`)
+var isExt1 = regexp.MustCompile(`^(.*)()\.(png|jpg|jpeg|tbn|nfo|srt)$`)
+var isExt2 = regexp.MustCompile(`^(.*)[.-]([a-z]+)\.(png|jpg|jpeg|tbn|nfo|srt)$`)
 var isYear = regexp.MustCompile(` \(([0-9]+)\)$`)
 
 func escapePath(p string) string {
@@ -139,8 +139,8 @@ func buildMovie(coll *Collection, dir string) (movie *Item) {
 		}
 
 		if ext == "srt" {
-			if aux == "" {
-				aux = "und"
+			if aux == "" || aux == "und" {
+				aux = "zz"
 			}
 			movie.SrtSubs = append(movie.SrtSubs, Subs{
 				Lang: aux,
@@ -150,8 +150,8 @@ func buildMovie(coll *Collection, dir string) (movie *Item) {
 		}
 
 		if ext == "vtt" {
-			if aux == "" {
-				aux = "und"
+			if aux == "" || aux == "und" {
+				aux = "zz"
 			}
 			movie.VttSubs = append(movie.VttSubs, Subs{
 				Lang: aux,
@@ -381,8 +381,8 @@ func showScanDir(baseDir string, dir string, seasonHint int, show *Item) {
 		}
 
 		if ext == "srt" {
-			if aux == "" {
-				aux = "und"
+			if aux == "" || aux == "und" {
+				aux = "zz"
 			}
 			ep.SrtSubs = append(ep.SrtSubs, Subs{
 				Lang: aux,
@@ -392,8 +392,8 @@ func showScanDir(baseDir string, dir string, seasonHint int, show *Item) {
 		}
 
 		if ext == "vtt" {
-			if aux == "" {
-				aux = "und"
+			if aux == "" || aux == "und" {
+				aux = "zz"
 			}
 			ep.VttSubs = append(ep.VttSubs, Subs{
 				Lang: aux,
