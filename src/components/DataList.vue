@@ -7,11 +7,12 @@
       <v-list-tile
         :href="item.href"
         :router="item.href !== undefined"
+        :action="item.icon !== undefined"
         :avatar="item.avatar !== undefined"
         @click.native="clicked($event, item, 'list_ref_' + index)">
-        <v-list-tile-avatar v-if="item.avatar !== undefined">
-          <v-icon>{{ item.avatar }}</v-icon>
-        </v-list-tile-avatar>
+        <v-list-tile-action v-if="item.icon !== undefined">
+          <v-icon>{{ item.icon }}</v-icon>
+        </v-list-tile-action>
         <v-list-tile-content>
           <radio name="item.radio"
            :label="item.label"
@@ -31,6 +32,9 @@
             v-if="item.search !== undefined"
             :ref="'list_ref_' + index" />
         </v-list-tile-content>
+        <v-list-tile-avatar v-if="item.avatar !== undefined">
+          <v-icon>{{ item.avatar }}</v-icon>
+        </v-list-tile-avatar>
       </v-list-tile>
     </v-list-item>
   </template>

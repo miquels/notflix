@@ -24,12 +24,12 @@ export default {
       items: [
         { header: 'MANAGE' },
         { divider: true },
-        { title: 'Status', href: '#', avatar: 'show_chart' },
-        { title: 'Settings', href: '#', avatar: 'settings' },
+        { title: 'Status', href: '#', icon: 'show_chart' },
+        { title: 'Settings', href: '#', icon: 'settings' },
         { header: 'LIBRARIES' },
         { divider: true },
-        { title: 'Movies', href: '/v/Movies', avatar: 'local_movies' },
-        { title: 'TV Shows', href: '/v/TV%20Shows', avatar: 'tv' }
+        { title: 'Movies', href: '/v/Movies', icon: 'local_movies' },
+        { title: 'TV Shows', href: '/v/TV%20Shows', icon: 'tv' }
       ]
     }
   },
