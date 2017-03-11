@@ -62,7 +62,7 @@ export default {
       this.draw(true)
     },
     focus () {
-      console.log('VirtualScroll: focus prop updated to', this.focus)
+      // console.log('VirtualScroll: focus prop updated to', this.focus)
     }
   },
   methods: {
@@ -122,7 +122,7 @@ export default {
         h += this.getItemHeight(this.items[i])
       }
       this.itemsStyle.height = h + 'px'
-      console.log('itemsUpdated: focus:', this.focus)
+      // console.log('itemsUpdated: focus:', this.focus)
       if (!this.focus) {
         if (!dontResetScrollTop) {
           this.$el.scrollTop = 0
@@ -255,7 +255,7 @@ export default {
       if (d <= 0) {
         return
       }
-      console.log('area.bottom, itemBottom', area.bottom, itemBottom)
+      // console.log('area.bottom, itemBottom', area.bottom, itemBottom)
 
       // scroll.
       this.targetScrollTop = this.$el.scrollTop + d

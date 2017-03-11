@@ -86,6 +86,9 @@ export default {
       }
     },
     mouse (item) {
+      if (this.$store.state.videoPlaying) {
+        return
+      }
       if (this.movieInfo && this.movieInfo.name !== item.name) {
         if (this.movieInfo.rowKey === this.rowKey) {
           this.setMovieInfo(item)

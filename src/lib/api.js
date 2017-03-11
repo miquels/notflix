@@ -39,10 +39,10 @@ export default class API {
     }
 
     let reqUrl = joinpath(this.url, path)
-    console.log('getObj url path req', this.url, path, reqUrl)
+    // console.log('getObj url path req', this.url, path, reqUrl)
     pending = []
     requestsPending[path] = pending
-    console.log('DBG: api.getObject: requesting', reqUrl)
+    // console.log('DBG: api.getObject: requesting', reqUrl)
 
     return new Promise((resolve, reject) => {
       pending.push({ resolve, reject })
@@ -53,7 +53,7 @@ export default class API {
         if (!resp.ok) {
           throw new RangeError('unexpected HTTP code ' + resp.status)
         }
-        console.log('response:', resp)
+        // console.log('response:', resp)
         resp.json().then((obj) => {
           objectCache[path] = obj
           while (pending.length > 0) {

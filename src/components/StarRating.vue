@@ -11,7 +11,6 @@ export default {
   computed: {
     stars () {
       let r = Math.round(this.rating)
-      console.log('rating', r)
       let s = ''
       for (let i = 0; i < 10; i += 2) {
         if (r > i + 1) {

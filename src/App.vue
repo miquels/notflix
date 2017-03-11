@@ -48,7 +48,7 @@
 </template>
 
 <script>
-import { setFullScreen, isFullScreen } from './lib/util'
+import * as util from './lib/util'
 import SimpleListItem from './components/SimpleListItem'
 import API from './lib/api'
 
@@ -81,8 +81,12 @@ export default {
       get () { return this.$store.state.fullscreen },
       set (s) {
         if (s !== this.$store.state.fullscreen) {
-          let elem = document.getElementsByTagName('HTML')[0]
-          setFullScreen(elem, s)
+          if (s) {
+            let elem = document.getElementsByTagName('BODY')[0]
+            util.requestFullscreen(elem)
+          } else {
+            util.exitFullscreen()
+          }
         }
       }
     }
@@ -94,10 +98,8 @@ export default {
   },
   mounted () {
     document.getElementById('initialLoadingDiv').style.display = 'none'
-    document.addEventListener('fullscreenchange', this.fullScreenChanged)
-    document.addEventListener('webkitfullscreenchange', this.fullScreenChanged)
-    document.addEventListener('mozfullscreenchange', this.fullScreenChanged)
-    window.addEventListener('resize', this.fullScreenChanged)
+    let fsce = util.fullscreenEvent('fullscreenchange')
+    document.addEventListener(fsce, this.fullscreenChanged)
   },
   methods: {
     posters (size) {
@@ -107,14 +109,14 @@ export default {
     reload () {
       location.reload()
     },
-    fullScreenChanged () {
-      // XXX fscking hack for now FIXME
-      if (this.$store.state.videoPlaying) {
+    fullscreenChanged (ev) {
+      let e = util.fullscreenElement()
+      if (e && e.nodeName !== 'BODY') {
         return
       }
-      let f = isFullScreen()
-      if (f !== this.$store.state.fullscreen) {
-        this.$store.commit('FULLSCREEN', f)
+      let isfs = e !== null
+      if (isfs !== this.$store.state.fullscreen) {
+        this.$store.commit('FULLSCREEN', isfs)
       }
     }
   }

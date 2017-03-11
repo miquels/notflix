@@ -33,32 +33,52 @@ export function joinpath (...args) {
   return ret.join('/')
 }
 
-export function isFullScreen () {
-  let fs = (document.fullScreenElement &&
-            document.fullScreenElement !== null) ||
-            document.mozFullScreen ||
-            document.webkitIsFullScreen
-  let fh = screen.height === window.innerHeight &&
-           screen.height === window.outerHeight
-  return fs || fh
-}
+const fse = [ 'fullscreenElelement', 'webkitFullscreenElement',
+  'mozFullScreenElement', 'msFullscreenElement' ]
+const rfs = [ 'requestFullscreen', 'webkitRequestFullscreen',
+  'mozRequestFullScreen', 'msRequestFullscreen' ]
+const efs = [ 'exitFullscreen', 'webkitExitFullscreen',
+  'mozCancelFullScreen', 'msExitFullscreen' ]
+const pfs = [ '', 'webkit', 'moz', 'ms' ]
 
-export function setFullScreen (elem, enable) {
-  let m
-  if (elem && enable !== false) {
-    m = [ 'requestFullscreen', 'msRequestFullscreen',
-      'mozRequestFullScreen', 'webkitRequestFullscreen' ]
-  } else {
-    m = [ 'exitFullscreen', 'msExitFullscreen',
-      'mozCancelFullScreen', 'webkitExitFullscreen' ]
-    elem = document
-  }
-  for (let f in m) {
-    if (elem[m[f]]) {
-      elem[m[f]]()
-      break
+export function fullscreenElement () {
+  for (let e of fse) {
+    if (document[e] !== undefined) {
+      return document[e]
     }
   }
+  return null
+}
+
+export function isFullscreen () {
+  return fullscreenElement() !== null
+}
+
+export function requestFullscreen (elem) {
+  for (let e of rfs) {
+    if (elem[e] !== undefined) {
+      return elem[e]()
+    }
+  }
+}
+
+export function exitFullscreen () {
+  for (let e of efs) {
+    if (document[e] !== undefined) {
+      return document[e]()
+    }
+  }
+}
+
+export function fullscreenEvent (name) {
+  for (let p of pfs) {
+    console.log('fullscreenEvent', name, document['on' + p + name])
+    let e = document['on' + p + name]
+    if (e !== undefined) {
+      return p + name
+    }
+  }
+  return undefined
 }
 
 // To prevent redirects, remove double slashes,

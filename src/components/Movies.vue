@@ -153,7 +153,7 @@ export default {
     },
 
     updatePosterSize (sz) {
-      console.log('componentWidth is now', this.componentWidth)
+      // console.log('componentWidth is now', this.componentWidth)
       this.renderers['header'].height = psizes[sz].hdrHeight
       this.renderers['header'].context.height = psizes[sz].hdrHeight
 
@@ -215,7 +215,7 @@ export default {
           subitems.push({ m: m, name: name, url: url, index: i })
 
           if (this.movieInfo && m.name === this.movieInfo.name) {
-            console.log('Movies: buildItems: movieInfo', m)
+            // console.log('Movies: buildItems: movieInfo', m)
             movieinfo = this.movieInfo
           }
         }
@@ -399,7 +399,6 @@ export default {
 
     sortByDate (movies, field) {
       let now = Date.now()
-      console.log('now is', now)
       for (let m of movies) {
         let d = m[field]
         if (d > now - (86400 * 1 * 1000)) {

@@ -57,10 +57,10 @@ export default {
   }),
   watch: {
     checkboxarray (a) {
-      console.log('checkboxarray watch', a)
+      // console.log('checkboxarray watch', a)
     },
     radiovalue (a) {
-      console.log('radiovalue watch', a)
+      // console.log('radiovalue watch', a)
     }
   },
   methods: {

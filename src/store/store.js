@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { isFullScreen } from '../lib/util'
+import { isFullscreen } from '../lib/util'
 
 Vue.use(Vuex)
 
@@ -14,7 +14,7 @@ const state = {
   api: null,
   media: {},
   sidebar: false,
-  fullscreen: isFullScreen(),
+  fullscreen: isFullscreen(),
   posterSize: 1,
   collection: '',
   movieInfo: null,

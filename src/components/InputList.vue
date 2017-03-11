@@ -60,7 +60,7 @@ export default {
   }),
   watch: {
     model (v) {
-      console.log('change', v)
+      // console.log('change', v)
       this.$emit('change', v)
     },
     vmodel (v) {
