@@ -1,5 +1,5 @@
 <template>
-<div class="virtual-scroll__container" :class="{scrollbar: !isMobile}" @scroll="scroll()">
+<div class="virtual-scroll__container" @scroll="scroll()">
   <div class="virtual-scroll__items" :style="itemsStyle">
     <div class="virtual-scroll__visible-items" :style="visibleItemsStyle">
     <component class="virtual-scroll__item"
@@ -41,11 +41,9 @@ export default {
     rHeight: {},
     rComponent: {},
     rContext: {},
-    isMobile: false,
     isScrolling: false
   }),
   mounted () {
-    this.isMobile = (window.orientation !== undefined)
     this.updateRenderers()
     this.itemsUpdated()
     this.draw()
@@ -266,6 +264,9 @@ export default {
             this.$el.scrollTop === this.expectedScrollTop &&
             this.$el.scrollTop < this.targetScrollTop) {
           this.expectedScrollTop = this.$el.scrollTop + inc
+          if (this.expectedScrollTop > this.targetScrollTop) {
+            this.expectedScrollTop = this.targetScrollTop
+          }
           this.$el.scrollTop = this.expectedScrollTop
           requestAnimationFrame(scrollFunc)
         }

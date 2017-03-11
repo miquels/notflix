@@ -1,6 +1,6 @@
 <template>
 <main>
-<v-sidebar v-model="sidebar" fixed :class="{scrollbar: !isMobile}">
+<v-sidebar v-model="sidebar" fixed>
   <v-list dense>
   <input-list dense type="search" :items="searchItems" v-model="search" />
   </v-list dense>
@@ -81,8 +81,7 @@ export default {
       search: '',
       sort: 'year',
       genre: [],
-      collection: 'Movies',
-      isMobile: false
+      collection: 'Movies'
     }
   },
   computed: {
@@ -95,7 +94,6 @@ export default {
     this.collection = this.$route.params.coll || 'Movies'
   },
   mounted () {
-    this.isMobile = (window.orientation !== undefined)
   }
 }
 </script>

@@ -6,6 +6,8 @@ import Resize from './directives/resize'
 import store from './store'
 import App from './App.vue'
 
+import * as util from './lib/util'
+
 import 'whatwg-fetch'
 
 import './styl/main.styl'
@@ -30,6 +32,14 @@ var router = new VueRouter({
       { path: '*', redirect: '/' }
   ]
 })
+
+if (!util.isMobile()) {
+  let w = 6
+  if (!util.isWebkit()) {
+    w = util.scrollbarWidth()
+  }
+  store.commit('SCROLLBAR_WIDTH', w)
+}
 
 store.dispatch('LOAD_CONFIG').then((res) => {
   /* eslint-disable no-new */

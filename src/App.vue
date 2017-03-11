@@ -68,7 +68,8 @@ export default {
         { divider: true },
         { title: 'Movies', href: '#', avatar: 'local_movies' },
         { title: 'TV Shows', href: '#', avatar: 'tv' }
-      ]
+      ],
+      webkitStyledScrollbar: util.isWebkit() && !util.isMobile()
     }
   },
 

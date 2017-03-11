@@ -81,6 +81,14 @@ export function fullscreenEvent (name) {
   return undefined
 }
 
+export function isMobile () {
+  return (window.orientation !== undefined)
+}
+
+export function isWebkit () {
+  return navigator.userAgent.match(/webkit/i) !== null
+}
+
 // To prevent redirects, remove double slashes,
 // and make sure the url ends in / for dirs.
 export function cleanURL (url, isDir) {
@@ -92,5 +100,30 @@ export function cleanURL (url, isDir) {
     url += '/'
   }
   return url
+}
+
+// inspired by
+// https://davidwalsh.name/detect-scrollbar-width
+export function scrollbarWidth (className) {
+  // Create the measurement node
+  let scrollDiv = document.createElement('div')
+  scrollDiv.style.width = '100px'
+  scrollDiv.style.height = '100px'
+  scrollDiv.style.overflow = 'scroll'
+  scrollDiv.style.position = 'absolute'
+  scrollDiv.style.top = '-9999px'
+  if (className) {
+    scrollDiv.className = className
+  }
+  document.body.appendChild(scrollDiv)
+  console.log('scrolldiv:', scrollDiv)
+
+  // Get the scrollbar width
+  let scrollbarWidth = scrollDiv.offsetWidth - scrollDiv.clientWidth
+
+  // Delete the DIV
+  document.body.removeChild(scrollDiv)
+
+  return scrollbarWidth
 }
 

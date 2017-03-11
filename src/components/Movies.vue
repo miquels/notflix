@@ -149,7 +149,7 @@ export default {
       if (this.itemsPerRow <= 0) {
         this.itemsPerRow = 1
       }
-      this.componentWidth = this.itemsPerRow * w
+      this.componentWidth = this.itemsPerRow * w + this.$store.state.scrollbarWidth
     },
 
     updatePosterSize (sz) {

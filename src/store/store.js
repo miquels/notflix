@@ -18,6 +18,7 @@ const state = {
   posterSize: 1,
   collection: '',
   movieInfo: null,
+  scrollbarWidth: 0,
   videoPlaying: false
 }
 
@@ -50,6 +51,9 @@ const mutations = {
   SAVE_CONFIG (state, config) {
     state.config = config
     state.apiURL = config.server
+  },
+  SCROLLBAR_WIDTH (state, w) {
+    state.scrollbarWidth = w
   }
 }
 
