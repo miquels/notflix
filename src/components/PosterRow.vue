@@ -74,7 +74,7 @@ export default {
         height: this.context.imgHeight + 20 + 'px'
       }
       if (this.movieInfo && this.movieInfo.name === item.name) {
-        r.borderColor = '#dedede'
+        r.borderColor = '#f0f0f0'
       }
       return r
     },
@@ -116,7 +116,8 @@ export default {
 
 .poster-row__item {
   box-sizing: content-box;
-  border: 5px solid rgba(0, 0, 0, 0);
+  margin: 1px;
+  border: 4px solid rgba(0, 0, 0, 0);
   position: relative;
   transition: all .2s ease-in-out;
 }
