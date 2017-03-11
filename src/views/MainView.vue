@@ -1,7 +1,7 @@
 <template>
 <main>
 <v-sidebar v-model="sidebar" fixed>
-  <data-list dense :items="items" />
+  <simple-list-data dense :items="items" />
 </v-sidebar>
 <v-content>
   <v-container fluid>
@@ -12,12 +12,12 @@
 </template>
 
 <script>
-import DataList from '../components/DataList'
+import SimpleListData from '../components/SimpleListData'
 
 export default {
   name: 'main-view',
   components: {
-    DataList
+    SimpleListData
   },
   data () {
     return {

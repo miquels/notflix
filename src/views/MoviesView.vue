@@ -35,14 +35,12 @@
 
 <script>
 import Movies from '../components/Movies'
-import DataList from '../components/DataList'
 import InputList from '../components/InputList'
 
 export default {
   name: 'movies-view',
   components: {
     Movies,
-    DataList,
     InputList
   },
   data () {
