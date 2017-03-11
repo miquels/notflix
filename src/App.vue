@@ -1,18 +1,16 @@
 <template>
-<v-app top-fixed-toolbar left-fixed-sidebar sidebar-under-toolbar>
+<v-app top-fixed-toolbar left-fixed-sidebar sidebar-under-toolbar
+  :class="{ webkitStyledScrollbar }">
   <header>
     <v-toolbar fixed>
       <v-toolbar-side-icon
          class="hidden-md-and-up"
          @click.native.stop="sidebar = !sidebar">
       </v-toolbar-side-icon>
-      <router-link to="/" tag="span" exact>
-        <v-btn icon dark>
-          <v-icon>home</v-icon>
-        </v-btn>
-      </router-link>
+      <v-btn icon dark>
+        <router-link to="/" tag="i" class="material-icons icon" exact>home</router-link>
+      </v-btn>
       <v-toolbar-title class="hidden-sm-and-down">NotFlix</v-toolbar-title>
-      <v-spacer/>
 
       <v-menu bottom left offset-y origin="top right" transition="v-slide-y-transition">
         <v-btn icon="icon" slot="activator" dark>
