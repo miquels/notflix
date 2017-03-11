@@ -1,7 +1,7 @@
 <template>
 <div class="poster-row__container">
   <div v-for="item in items"
-    class="poster-row__item" :style="itemStyle" :key="item.name">
+    class="poster-row__item" :style="itemStyle(item)" :key="item.name">
     <div :style="wrapStyle" class="poster-row__imgwrap"
           @mouseenter="mouse(item)"
           @click="click(item)"
@@ -33,14 +33,9 @@ export default {
     context: { type: Object }
   },
   computed: {
-    itemStyle () {
+    fontSize () {
       let sz = Math.floor(this.context.imgWidth / 10)
-      sz = sz > 15 ? 15 : sz
-      return {
-        fontSize: sz + 'px',
-        width: this.context.imgWidth + 'px',
-        height: this.context.imgHeight + 20 + 'px'
-      }
+      return sz > 15 ? 15 : sz
     },
     wrapStyle () {
       let fontsz = Math.floor(this.context.imgWidth / 7)
@@ -50,8 +45,6 @@ export default {
         width: this.context.imgWidth + 'px',
         height: this.context.imgHeight + 'px'
       }
-    },
-    fontSize () {
     },
     movieInfo () {
       return this.$store.state.movieInfo
@@ -73,6 +66,17 @@ export default {
         return pixel
       }
       return url + this.query
+    },
+    itemStyle (item) {
+      let r = {
+        fontSize: this.fontSize + 'px',
+        width: this.context.imgWidth + 'px',
+        height: this.context.imgHeight + 20 + 'px'
+      }
+      if (this.movieInfo && this.movieInfo.name === item.name) {
+        r.borderColor = '#dedede'
+      }
+      return r
     },
     setMovieInfo (item) {
       let rowKey = this.rowKey
@@ -106,39 +110,15 @@ export default {
 
 .poster-row__item:hover {
   cursor: pointer;
-  box-shadow: 0px 0px 10px 6px #555;
+  box-shadow: 0px 0px 10px 1px #888;
   z-index: 4;
 }
 
-/*
-.poster-row__item:hover {
-  z-index: 5;
-  transform: scale(1.70);
-  .poster-row__imgwrap {
-    border-radius: 10px 10px 0 0;
-    transition-delay: 0.5s;
-  }
-  .poster-row__info {
-    font-size: 0.7em;
-    transition-delay: 0.5s;
-    transition: all .2s ease-in-out;
-    transition-delay: 0.5s;
-    white-space: normal;
-    max-height: 5em;
-  }
-  img {
-    border-radius: 10px 10px 0 0;
-    transition-delay: 0.5s;
-  }
-  font-size: 12px;
-  transition-delay: 0.5s;
-}
-*/
-
 .poster-row__item {
+  box-sizing: content-box;
+  border: 5px solid rgba(0, 0, 0, 0);
   position: relative;
   transition: all .2s ease-in-out;
-  margin: 5px;
 }
 .poster-row__imgwrap {
   display: flex;
@@ -173,6 +153,7 @@ export default {
   font-size: 14px;
   overflow: hidden;
   white-space: nowrap;
+  box-sizing: border-box;
   padding-left: 3px;
   padding-right: 3px;
   text-overflow: ellipsis;
