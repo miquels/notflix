@@ -10,7 +10,7 @@ import * as util from './lib/util'
 
 import 'whatwg-fetch'
 
-import './styl/main.styl'
+import './stylus/main.styl'
 import './css/_scrollbar.scss'
 // import '../node_modules/vuetify/src/stylus/main.styl'
 
