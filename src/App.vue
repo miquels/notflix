@@ -12,6 +12,8 @@
       </v-btn>
       <v-toolbar-title class="hidden-sm-and-down">NotFlix</v-toolbar-title>
 
+      <v-spacer/>
+
       <v-menu bottom left offset-y origin="top right" transition="v-slide-y-transition">
         <v-btn icon="icon" slot="activator" dark>
           <v-icon>apps</v-icon>

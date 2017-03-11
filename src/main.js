@@ -41,6 +41,12 @@ if (!util.isMobile()) {
   store.commit('SCROLLBAR_WIDTH', w)
 }
 
+let cw = document.body.clientWidth
+let ch = document.body.clientHeight
+if (cw < 800 || (ch > 0 && ch < 500)) {
+  store.commit('POSTER_SIZE', 0)
+}
+
 store.dispatch('LOAD_CONFIG').then((res) => {
   /* eslint-disable no-new */
   new Vue({
