@@ -11,11 +11,13 @@
   <v-list-group no-action>
     <v-list-item slot="item">
       <v-list-tile>
-        <v-list-tile-title v-text="'GENRE'" />
-          <v-list-tile-action>
-            <v-icon>keyboard_arrow_down</v-icon>
-          </v-list-tile-action>
-        </v-list-tile>
+        <v-list-tile-content>
+          <v-list-tile-title v-text="'GENRE'" />
+        </v-list-tile-content>
+        <v-list-tile-action>
+          <v-icon>keyboard_arrow_down</v-icon>
+        </v-list-tile-action>
+      </v-list-tile>
     </v-list-item>
     <input-list type="checkbox" :items="filterItems" v-model="genre" />
   </v-list-group>
