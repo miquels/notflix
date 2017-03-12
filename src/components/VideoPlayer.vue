@@ -78,15 +78,18 @@ export default {
 
 <style>
 .video-player__container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   height: 100%;
   width: 100%;
   background: black;
 }
 .video-player__main {
-  width: 100%	!important;
-  height: auto	!important;
+  width: auto  !important;
+  height: auto !important;
+  max-width: 100%;
   max-height: 100%;
-  margin: auto;
 }
 video::cue {
   font-family: arial;
