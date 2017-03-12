@@ -1,5 +1,10 @@
 <template>
 <div class="movie-info__container">
+<div class="movie-info__right" :style="rightStyle">
+  <div class="movie-info__play" @click="play()">
+    <i class="material-icons movie-info__largefont">play_circle_outline</i>
+  </div>
+</div>
 <div class="movie-info__left" :style="leftStyle">
   <div class="movie-info__title">{{ title }}</div>
   <div class="movie-info__rating">
@@ -21,11 +26,6 @@
   </div>
   <div class="movie-info__plot movie-info__grey" v-if="subs">
     Subtitles: {{subs}}
-  </div>
-</div>
-<div class="movie-info__right" :style="rightStyle">
-  <div class="movie-info__play" @click="play()">
-    <i class="material-icons movie-info__largefont">play_circle_outline</i>
   </div>
 </div>
 <video-player v-if="video" class="movie-info__player" :item="video" />
@@ -222,7 +222,7 @@ export default {
 <style lang="scss">
 .movie-info__container {
   position: relative;
-  display: flex;
+  // display: flex;
   box-sizing: border-box;
   width: 100%;
   font-family: sans-serif;
@@ -243,15 +243,20 @@ export default {
   height: 35px;
 }
 .movie-info__left {
+  position: relative;
   padding: 20px;
-  flex-grow: 1;
-  flex-basis: 0;
+  width: 43%;
+  // flex-grow: 1;
+  // flex-basis: 0;
 }
 .movie-info__right {
-  position: relative;
-  display: flex;
-  flex-grow: 2;
-  flex-basis: 0;
+  position: absolute;
+  width: 67%;
+  top: 0px;
+  right: 0px;
+  // display: flex;
+  // flex-grow: 2;
+  // flex-basis: 0;
   background-size: cover;
 }
 .movie-info__title {
