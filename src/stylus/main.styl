@@ -25,8 +25,12 @@ $sidebar-width := 200px
 
 // sidebar adjustments.
 .sidebar
-    font-size: 12px
-    padding-left: 6px
+  padding-left: 6px
+
+// make dense list in sidebar denser.
+.sidebar .list--dense .list__tile
+  height: 36px
+  font-size: 15px
 
 // sidebar item highlist on hover.
 .sidebar a.list__tile:hover
@@ -36,9 +40,9 @@ $sidebar-width := 200px
 // toolbar colors and hover colors.
 .toolbar
     background-color: black
-.toolbar button
+.toolbar .btn
   color: #aaa
-.toolbar button:hover
+.toolbar .btn:hover
     background-color: #222
     color: white
 
@@ -60,7 +64,7 @@ $sidebar-width := 200px
 // for some reason can't use the word 'transition' in stylus here
 // use standard CSS for now.
 @css {
-  .toolbar button {
+  .toolbar .btn {
     transition: color 0s;
   }
   .sidebar a.list__tile {
