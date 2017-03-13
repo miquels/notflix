@@ -83,6 +83,10 @@ export default {
   },
   beforeDestroy () {
     // console.log('VideoPlayer destroyed')
+    // firefox needs pause + invalidate src, or it will
+    // keep on playing even though the <video> element is gone.
+    this.video.pause()
+    delete this.video.src
     let fsce = util.fullscreenEvent('fullscreenchange')
     document.removeEventListener(fsce, this.fullscreenChanged)
     if (this.controlsVisibleTimer) {
