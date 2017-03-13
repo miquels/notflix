@@ -34,26 +34,9 @@ export default {
     // call handler on window resize events
     window.addEventListener('resize', handler, false)
     el._resizeHandler = handler
-
-    // call handler on orientation change events
-    window.addEventListener('orientationchange', handler, false)
-
-    // call handler when we toggle full screen mode
-    document.addEventListener('fullscreenchange', handler, false)
-
-    // call handler when element.style changes.
-    var observer = new MutationObserver((mutations) => handler(null))
-    observer.observe(el, {
-      attributes: true,
-      attributeFilter: [ 'style' ]
-    })
-    el._resizeObserver = observer
   },
 
   unbind (el) {
     window.removeEventListener('resize', el._resizeHandler, false)
-    window.removeEventListener('orientationchange', el._resizeHandler, false)
-    window.removeEventListener('fullscreenchange', el._resizeHandler, false)
-    el._resizeObserver.disconnect()
   }
 }

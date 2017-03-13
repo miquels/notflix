@@ -22,7 +22,7 @@
       :srclang="s.lang"
       :label="s.label"></track>
   </video>
-  <div class="video-player__controls" v-if="controlsVisible">
+  <div class="video-player__controls" v-show="controlsVisible">
     <div class="video-player__progress" ref="progress" @click="progressClick($event)">
       <div class="video-player__pstart" :style="{ flexBasis: timePct + '%' }"></div>
       <div class="video-player__pend">
@@ -35,8 +35,8 @@
       <div class="video-player__time">{{ time }}</div>
       <div class="video-player__spacer" />
       <i class="video-player__btn material-icons md-light" @click="volume()">{{volIcon}}</i>
-      <i class="video-player__btn material-icons md-light" @click="subs">subtitles</i>
-      <i class="video-player__btn material-icons md-light" @click="fullscreen">{{fsIcon}}</i>
+      <i class="video-player__btn material-icons md-light" @click="subs()">subtitles</i>
+      <i class="video-player__btn material-icons md-light" @click="fullscreen()">{{fsIcon}}</i>
     </div>
   </div>
 </div>
@@ -75,11 +75,26 @@ export default {
     controlsVisible: true
   }),
   mounted () {
+    // console.log('VideoPlayer mounted')
     this.$store.commit('VIDEO_PLAYING', true)
     this.video = this.$refs.video
+    let fsce = util.fullscreenEvent('fullscreenchange')
+    document.addEventListener(fsce, this.fullscreenChanged)
   },
-  destroyed () {
-    this.$store.commit('VIDEO_PLAYING', false)
+  beforeDestroy () {
+    // console.log('VideoPlayer destroyed')
+    let fsce = util.fullscreenEvent('fullscreenchange')
+    document.removeEventListener(fsce, this.fullscreenChanged)
+    if (this.controlsVisibleTimer) {
+      clearTimeout(this.controlsVisibleTimer)
+    }
+    this.cleanupFullscreen()
+  },
+  beforeUpdate () {
+    // console.log('VideoPlayer beforeupdate')
+  },
+  updated () {
+    // console.log('VideoPlayer updated')
   },
   watch: {
     playing () {
@@ -95,7 +110,6 @@ export default {
     },
     videoSrc () {
       const item = this.item
-      console.log('videosrc', item)
       return util.joinpath(this.apiURL, item.baseurl, item.path, item.video)
     },
     subs () {
@@ -114,21 +128,6 @@ export default {
     }
   },
   methods: {
-    twoDigits (n) {
-      return n < 10 ? '0' + n : n
-    },
-    hhmmss (doHour, tm) {
-      if (tm === null || tm === undefined) {
-        return '-'
-      }
-      var h = Math.floor(tm / 3600)
-      var m = Math.floor((tm % 3600) / 60)
-      var s = Math.floor(tm % 60)
-      if (doHour || h > 0) {
-        return this.twoDigits(h) + ':' + this.twoDigits(m) + ':' + this.twoDigits(s)
-      }
-      return this.twoDigits(m) + ':' + this.twoDigits(s)
-    },
     langLabel (ll) {
       if (langMap[ll]) {
         return langMap[ll]
@@ -173,11 +172,10 @@ export default {
       this.playing = !this.video.paused
       let duration = this.video.duration || 0
       let time = this.video.currentTime || 0
-      let doHour = duration >= 3600
-      this.time = this.hhmmss(doHour, time)
+      this.time = util.hhmmss(time, duration >= 3600)
       if (duration) {
         if (this.$refs.progress && this.$refs.progress.clientWidth >= 280) {
-          this.time += ' / ' + this.hhmmss(doHour, duration)
+          this.time += ' / ' + util.hhmmss(duration)
         }
         this.timePct = 100 * (time / duration)
         if (this.timePct > 100) {
@@ -188,7 +186,8 @@ export default {
     stop () {
       this.video.pause()
       this.playing = false
-      this.video.currentTime = 0
+      this.video.currentTime = 5
+      this.fullscreen(false)
     },
     play () {
       if (this.video.paused) {
@@ -206,37 +205,69 @@ export default {
     subs () {
     },
 
-    fullscreen () {
-      // toggle.
-      this.isFullscreen = !this.isFullscreen
+    fullscreenChanged () {
+      if (!util.isFullscreen()) {
+        // got out of fullscreen mode, either by user pressing
+        // exit-fullscreen button, or hitting the escape key.
+        setTimeout(() => { this.$store.commit('VIDEO_FULLSCREEN', false) }, 650)
+        this.fullscreen(false)
+      }
+    },
 
-      // might stop video, make sure it resumes playing.
-      if (!this.video.paused) {
-        setTimeout(() => { this.video.play() }, 200)
+    fullscreen (what) {
+      // set or toggle.
+      if (what !== undefined) {
+        this.isFullscreen = what
+      } else {
+        this.isFullscreen = !this.isFullscreen
       }
 
-      // try native fullscreen.
+      let nativeFullscreen = false
       if (util.fullscreenEnabled()) {
         let e = util.fullscreenElement()
-        if (!e || e.nodeName !== 'BODY') {
-          if (this.isFullscreen) {
-            if (!e) {
-              util.requestFullscreen(this.$refs.main)
-            }
-          } else {
-            util.exitFullscreen()
-          }
-          return
+        if (e === null || e === this.$refs.main) {
+          nativeFullscreen = true
         }
       }
 
-      // fullscreen not available (or already fullscreen) -- fill window.
+      if (nativeFullscreen) {
+        if (this.isFullscreen) {
+          if (!util.isFullscreen()) {
+            // console.log('request fullscreen')
+            this.$store.commit('VIDEO_FULLSCREEN', true)
+            util.requestFullscreen(this.$refs.main)
+          }
+        } else {
+          // console.log('exit fullscreen')
+          util.exitFullscreen()
+          this.maxSize = false
+          this.$refs.container.appendChild(this.$refs.main)
+        }
+        return
+      }
+
+      // fullwindow mode.
+      if (!this.video.paused) {
+        setTimeout(() => { this.video.play() }, 1)
+      }
       this.maxSize = this.isFullscreen
       if (this.maxSize) {
         document.getElementsByTagName('BODY')[0].appendChild(this.$refs.main)
       } else {
         this.$refs.container.appendChild(this.$refs.main)
       }
+    },
+
+    cleanupFullscreen () {
+      // called on exit.
+      let e = util.fullscreenElement()
+      if (e === this.$refs.main) {
+        util.exitFullscreen()
+        setTimeout(() => { this.$store.commit('VIDEO_FULLSCREEN', false) }, 650)
+      } else {
+        this.$store.commit('VIDEO_FULLSCREEN', false)
+      }
+      this.$refs.container.appendChild(this.$refs.main)
     }
   }
 }

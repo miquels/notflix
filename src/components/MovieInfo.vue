@@ -28,7 +28,7 @@
     Subtitles: {{subs}}
   </div>
 </div>
-<video-player v-if="video" class="movie-info__player" :item="video" />
+<video-player v-if="video" class="movie-info__player" :item="video" @stop="close()" />
 <div class="movie-info__close" @click="close()"><v-icon>close</v-icon></div>
 </div>
 </template>

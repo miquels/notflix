@@ -33,6 +33,23 @@ export function joinpath (...args) {
   return ret.join('/')
 }
 
+function twoDigits (n) {
+  return n < 10 ? '0' + n : n
+}
+
+export function hhmmss (tm, doHour) {
+  if (tm === null || tm === undefined) {
+    return '-'
+  }
+  var h = Math.floor(tm / 3600)
+  var m = Math.floor((tm % 3600) / 60)
+  var s = Math.floor(tm % 60)
+  if (doHour || h > 0) {
+    return twoDigits(h) + ':' + twoDigits(m) + ':' + twoDigits(s)
+  }
+  return twoDigits(m) + ':' + twoDigits(s)
+}
+
 const fse = [ 'fullscreenElelement', 'webkitFullscreenElement',
   'mozFullScreenElement', 'msFullscreenElement' ]
 const rfs = [ 'requestFullscreen', 'webkitRequestFullscreen',

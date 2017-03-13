@@ -168,7 +168,8 @@ export default {
     },
 
     resizeEvent () {
-      if (!this.$store.state.videoPlaying) {
+      if (!this.$store.state.videoFullscreen) {
+        console.log('Movies: resizing..')
         this.resize()
       }
     },

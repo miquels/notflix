@@ -19,6 +19,7 @@ const state = {
   collection: '',
   movieInfo: null,
   scrollbarWidth: 0,
+  videoFullscreen: false,
   videoPlaying: false
 }
 
@@ -47,6 +48,9 @@ const mutations = {
   },
   VIDEO_PLAYING (state, flag) {
     state.videoPlaying = flag
+  },
+  VIDEO_FULLSCREEN (state, flag) {
+    state.videoFullscreen = flag
   },
   SAVE_CONFIG (state, config) {
     state.config = config
