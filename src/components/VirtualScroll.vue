@@ -199,7 +199,9 @@ export default {
     },
     draw (force) {
       let area = this.getVisibleArea()
-      let start = this.binarySearch(area.top)
+      // on webkit, a scroll bounce can get a negative x-coordinate.
+      let top = area.top < 0 ? 0 : area.top
+      let start = this.binarySearch(top)
       if (start < 0) {
         this.visibleItems = []
         return
@@ -270,7 +272,7 @@ export default {
           requestAnimationFrame(scrollFunc)
         }
       }
-      scrollFunc()
+      setTimeout(scrollFunc, 50)
     }
   }
 }
