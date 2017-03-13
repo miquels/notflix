@@ -39,6 +39,8 @@ const rfs = [ 'requestFullscreen', 'webkitRequestFullscreen',
   'mozRequestFullScreen', 'msRequestFullscreen' ]
 const efs = [ 'exitFullscreen', 'webkitExitFullscreen',
   'mozCancelFullScreen', 'msExitFullscreen' ]
+const fsn = [ 'fullscreenEnabled', 'webkitFullscreenEnabled',
+  'mozFullScreenEnabled', 'msFullscreenEnabled' ]
 const pfs = [ '', 'webkit', 'moz', 'ms' ]
 
 export function fullscreenElement () {
@@ -62,6 +64,15 @@ export function requestFullscreen (elem) {
   }
 }
 
+export function fullscreenEnabled () {
+  for (let e of fsn) {
+    if (document[e] !== undefined) {
+      return document[e]
+    }
+  }
+  return false
+}
+
 export function exitFullscreen () {
   for (let e of efs) {
     if (document[e] !== undefined) {
@@ -72,7 +83,6 @@ export function exitFullscreen () {
 
 export function fullscreenEvent (name) {
   for (let p of pfs) {
-    console.log('fullscreenEvent', name, document['on' + p + name])
     let e = document['on' + p + name]
     if (e !== undefined) {
       return p + name
