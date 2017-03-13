@@ -253,7 +253,6 @@ export default {
       if (d <= 0) {
         return
       }
-      // console.log('area.bottom, itemBottom', area.bottom, itemBottom)
 
       // scroll.
       this.targetScrollTop = this.$el.scrollTop + d

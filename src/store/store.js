@@ -20,7 +20,8 @@ const state = {
   movieInfo: null,
   scrollbarWidth: 0,
   videoFullscreen: false,
-  videoPlaying: false
+  videoPlaying: false,
+  vhOffset: 0
 }
 
 // mutations: synchronous changes
@@ -58,6 +59,9 @@ const mutations = {
   },
   SCROLLBAR_WIDTH (state, w) {
     state.scrollbarWidth = w
+  },
+  VH_OFFSET (state, offset) {
+    state.vhOffset = offset
   }
 }
 

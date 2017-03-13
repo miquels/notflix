@@ -6,6 +6,18 @@ body {
   background: black;
 }
 
+#vhMeasureDiv1 {
+  position: absolute;
+  width: 0px;
+  height: 100vh;
+}
+
+#vhMeasureDiv2 {
+  position: absolute;
+  width: 0px;
+  height: 100%;
+}
+
 #initialLoadingDiv {
   position: fixed;
   left: 0px;

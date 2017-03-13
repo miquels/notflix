@@ -26,6 +26,7 @@
 <v-content>
   <v-container fluid>
     <movies class="movies-view__movies"
+      :style="{ height: moviesViewHeight }"
       :collection="collection"
       :genre="genre"
       :sort="sort"
@@ -88,6 +89,9 @@ export default {
     sidebar: {
       get () { return this.$store.state.sidebar },
       set (s) { this.$store.commit('SIDEBAR', s) }
+    },
+    moviesViewHeight () {
+      return 'calc(100vh - ' + (64 + 10 + this.$store.state.vhOffset) + 'px)'
     }
   },
   created () {
@@ -100,7 +104,7 @@ export default {
 
 <style lang="scss">
 .movies-view__movies {
-  height: calc(100vh - 80px);
+  height: calc(100vh - 64px);
   margin-left: 8px;
   margin-right: 2px;
 }

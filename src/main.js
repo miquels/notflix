@@ -33,6 +33,7 @@ var router = new VueRouter({
   ]
 })
 
+// measure scrollbar width.
 if (!util.isMobile()) {
   let w = 6
   if (!util.isWebkit()) {
@@ -41,6 +42,17 @@ if (!util.isMobile()) {
   store.commit('SCROLLBAR_WIDTH', w)
 }
 
+// Android adds the size of the lower button area (56px) to '100vh'.
+// Try to measure this offset, then use calc(100vh - state.vhOffset)
+// instead of 100vh to get the _real_ viewport height.
+let md1 = document.getElementById('vhMeasureDiv1').clientHeight
+let md2 = document.getElementById('vhMeasureDiv2').clientHeight
+if (md1 !== md2 && md1 > 0 && md2 > 0) {
+  store.commit('VH_OFFSET', md1 - md2)
+}
+
+// see if the screen is smallish, in that case start out with the
+// smallest poster size - hopefully we can fit 3 in a row.
 let cw = document.body.clientWidth
 let ch = document.body.clientHeight
 if (cw < 800 || (ch > 0 && ch < 500)) {

@@ -88,6 +88,7 @@ export default {
     if (this.controlsVisibleTimer) {
       clearTimeout(this.controlsVisibleTimer)
     }
+    this.$store.commit('VIDEO_PLAYING', false)
     this.cleanupFullscreen()
   },
   beforeUpdate () {
