@@ -3,8 +3,12 @@
 <div class="video-player__main"
   :class="{ 'video-player__maxsize': maxSize }"
   @mousemove="showControls()"
-  @click="showControls()"
-  ref="main">
+  @click="$refs.main.focus(); play()"
+  @dblclick="fullscreen()"
+  @keydown="keyDown($event)"
+  @keyup="keyUp($event)"
+  ref="main"
+  tabindex="1">
   <video
     ref="video"
     autoplay
@@ -22,7 +26,7 @@
       :srclang="s.lang"
       :label="s.label"></track>
   </video>
-  <div class="video-player__controls" v-show="controlsVisible">
+  <div class="video-player__controls" v-show="controlsVisible" @click.stop="showControls()">
     <div class="video-player__progress" ref="progress" @click="progressClick($event)">
       <div class="video-player__pstart" :style="{ flexBasis: timePct + '%' }"></div>
       <div class="video-player__pend">
@@ -80,6 +84,7 @@ export default {
     this.video = this.$refs.video
     let fsce = util.fullscreenEvent('fullscreenchange')
     document.addEventListener(fsce, this.fullscreenChanged)
+    this.$refs.main.focus()
   },
   beforeDestroy () {
     // console.log('VideoPlayer destroyed')
@@ -205,6 +210,35 @@ export default {
     volume () {
       this.video.volume = this.video.volume > 0 ? 0 : 1
       this.muted = this.video.volume === 0
+    },
+
+    keyDown (ev) {
+      console.log('keyDown', ev)
+      switch (ev.keyCode) {
+        case 32: // space
+          this.play()
+          break
+        case 37: // arrowLeft
+          this.video.currentTime -= 10
+          this.showControls()
+          break
+        case 38: // arrowUp
+          break
+        case 39: // arrowRight
+          this.video.currentTime += 10
+          this.showControls()
+          break
+        case 40: // arrowDown
+          break
+        default:
+          return
+      }
+      ev.preventDefault()
+      ev.stopPropagation()
+    },
+
+    keyUp () {
+      return
     },
 
     subs () {
