@@ -82,6 +82,7 @@ export default {
     // console.log('VideoPlayer mounted')
     this.$store.commit('VIDEO_PLAYING', true)
     this.video = this.$refs.video
+    this.video.play()
     let fsce = util.fullscreenEvent('fullscreenchange')
     document.addEventListener(fsce, this.fullscreenChanged)
     this.$refs.main.focus()
