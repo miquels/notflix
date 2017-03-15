@@ -1,49 +1,49 @@
 <template>
 <div class="video-player__container" ref="container">
-<div class="video-player__main"
-  :class="{ 'video-player__maxsize': maxSize }"
-  @mousemove="showControls()"
-  @click="$refs.main.focus(); play()"
-  @dblclick="fullscreen()"
-  @keydown="keyDown($event)"
-  @keyup="keyUp($event)"
-  ref="main"
-  tabindex="1">
-  <video
-    ref="video"
-    autoplay
-    preload="metadata"
-    crossorigin="anonymous"
-    :src="videoSrc"
-    @ended="ended()"
-    @loadeddata="loadedData()"
-    @loadedmetadata="loadedMetaData()"
-    @timeupdate="timeUpdate()"
-    >
-    <track v-for="s in subs"
-      kind="subtitles"
-      :src="s.src"
-      :srclang="s.lang"
-      :label="s.label"></track>
-  </video>
-  <div class="video-player__controls" v-show="controlsVisible" @click.stop="showControls()">
-    <div class="video-player__progress" ref="progress" @click="progressClick($event)">
-      <div class="video-player__pstart" :style="{ flexBasis: timePct + '%' }"></div>
-      <div class="video-player__pend">
-        <div class="video-player__knob"></div>
+  <div class="video-player__fullscreen" ref="main" :class="{ 'video-player__maxsize': maxSize }">
+    <div class="video-player__main"
+      @mousemove="showControls()"
+      @click="$refs.main.focus(); play()"
+      @dblclick="setFullscreen()"
+      @keydown="keyDown($event)"
+      @keyup="keyUp($event)"
+      ref="main2"
+      tabindex="1">
+      <video
+        ref="video"
+        autoplay
+        preload="metadata"
+        crossorigin="anonymous"
+        :src="videoSrc"
+        @ended="ended()"
+        @loadeddata="loadedData()"
+        @loadedmetadata="loadedMetaData()"
+        @timeupdate="timeUpdate()">
+          <track v-for="s in subs"
+          kind="subtitles"
+          :src="s.src"
+          :srclang="s.lang"
+          :label="s.label"></track>
+      </video>
+      <div class="video-player__controls" v-show="controlsVisible" @click.stop="showControls()">
+        <div class="video-player__progress" ref="progress" @click="progressClick($event)">
+          <div class="video-player__pstart" :style="{ flexBasis: timePct + '%' }"></div>
+          <div class="video-player__pend">
+            <div class="video-player__knob"></div>
+          </div>
+        </div>
+        <div class="video-player__buttons">
+          <i class="video-player__btn material-icons md-light" @click="stop()">stop</i>
+          <i class="video-player__btn material-icons md-light" @click="play()">{{playIcon}}</i>
+          <div class="video-player__time">{{ time }}</div>
+          <div class="video-player__spacer" />
+          <i class="video-player__btn material-icons md-light" @click="volume()">{{volIcon}}</i>
+          <i class="video-player__btn material-icons md-light" @click="subs()">subtitles</i>
+          <i class="video-player__btn material-icons md-light" @click="setFullscreen()">{{fsIcon}}</i>
+        </div>
       </div>
     </div>
-    <div class="video-player__buttons">
-      <i class="video-player__btn material-icons md-light" @click="stop()">stop</i>
-      <i class="video-player__btn material-icons md-light" @click="play()">{{playIcon}}</i>
-      <div class="video-player__time">{{ time }}</div>
-      <div class="video-player__spacer" />
-      <i class="video-player__btn material-icons md-light" @click="volume()">{{volIcon}}</i>
-      <i class="video-player__btn material-icons md-light" @click="subs()">subtitles</i>
-      <i class="video-player__btn material-icons md-light" @click="fullscreen()">{{fsIcon}}</i>
-    </div>
   </div>
-</div>
 </div>
 </template>
 
@@ -67,7 +67,8 @@ const langMap = {
 export default {
   name: 'video-player',
   props: {
-    item: Object
+    item: Object,
+    fullscreen: Boolean
   },
   data: () => ({
     playing: false,
@@ -83,6 +84,9 @@ export default {
     this.$store.commit('VIDEO_PLAYING', true)
     this.video = this.$refs.video
     this.video.play()
+    if (this.fullscreen) {
+      this.setFullscreen(true)
+    }
     let fsce = util.fullscreenEvent('fullscreenchange')
     document.addEventListener(fsce, this.fullscreenChanged)
     this.$refs.main.focus()
@@ -198,7 +202,7 @@ export default {
       this.video.pause()
       this.playing = false
       this.video.currentTime = 5
-      this.fullscreen(false)
+      this.setFullscreen(false)
     },
     play () {
       if (this.video.paused) {
@@ -250,11 +254,11 @@ export default {
         // got out of fullscreen mode, either by user pressing
         // exit-fullscreen button, or hitting the escape key.
         setTimeout(() => { this.$store.commit('VIDEO_FULLSCREEN', false) }, 650)
-        this.fullscreen(false)
+        this.setFullscreen(false)
       }
     },
 
-    fullscreen (what) {
+    setFullscreen (what) {
       // set or toggle.
       if (what !== undefined) {
         this.isFullscreen = what
@@ -315,23 +319,29 @@ export default {
 
 <style lang="scss">
 .video-player__container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
   height: 100%;
   width: 100%;
   background: black;
 }
 .video-player__main {
   position: relative;
-  width: 100;
+  display: flex;
+  width: 100%;
   height: 100%;
   video {
-    width: 100%  !important;
-    height: auto !important;
-    max-width: 100%;
+    width: 100% !important;
+    height: auto;
     max-height: 100%;
   }
+  background: black;
+}
+.video-player__fullscreen {
+  display: flex;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
   background: black;
 }
 .video-player__maxsize {

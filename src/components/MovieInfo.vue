@@ -1,8 +1,13 @@
 <template>
 <div class="movie-info__container">
 <div class="movie-info__right" :style="rightStyle">
-  <div class="movie-info__play" @click="play()">
-    <i class="material-icons movie-info__largefont">play_circle_outline</i>
+  <div class="movie-info__play">
+    <div class="movie-info__playicons">
+      <i class="material-icons movie-info__play-fsicon" @click="play(true)">fullscreen</i>
+      <i class="material-icons movie-info__play-arrowicon">play_arrow</i>
+      <i class="material-icons movie-info__play-circleicon" @click="play()">play_circle_outline</i>
+      <i class="material-icons movie-info__play-infoicon">info_outline</i>
+    </div>
   </div>
 </div>
 <div class="movie-info__left" :style="leftStyle">
@@ -28,7 +33,7 @@
     Subtitles: {{subs}}
   </div>
 </div>
-<video-player v-if="video" class="movie-info__player" :item="video" @stop="close()" />
+<video-player v-if="video" class="movie-info__player" :item="video" :fullscreen="videoFullscreen"  @stop="close()" />
 <div class="movie-info__close" @click="close()"><v-icon>close</v-icon></div>
 </div>
 </template>
@@ -48,7 +53,8 @@ export default {
   data: () => ({
     itemNfo: {},
     seasons: null,
-    video: null
+    video: null,
+    videoFullscreen: false
   }),
   components: {
     StarRating,
@@ -209,7 +215,8 @@ export default {
       }
       return a.join(', ')
     },
-    play () {
+    play (fs) {
+      this.videoFullscreen = fs
       this.video = this.items
     },
     close () {
@@ -290,7 +297,6 @@ export default {
 }
 .movie-info__play {
   display: flex;
-  cursor: pointer;
   position: absolute;
   left: 0; right: 0; top: 0; bottom: 0;
   align-items: center;
@@ -298,8 +304,31 @@ export default {
   text-shadow: 0px 0px 10px #000;
   color: white;
 }
-.movie-info__largefont {
-  font-size: 128px !important;
+.movie-info__playicons {
+  position: relative;
+  align-items: center;
+  display: flex;
+}
+.movie-info__play-fsicon {
+  font-size: 80px !important;
+  position: absolute;
+  left: -20px;
+  cursor: pointer;
+}
+.movie-info__play-arrowicon {
+  font-size: 40px !important;
+  margin-right: 10px;
+}
+.movie-info__play-circleicon {
+  font-size: 64px !important;
+  margin-left: 10px;
+  margin-right: 10px;
+  cursor: pointer;
+}
+.movie-info__play-infoicon {
+  font-size: 64px !important;
+  margin-left: 10px;
+  cursor: pointer;
 }
 .movie-info__player {
   position: absolute;
