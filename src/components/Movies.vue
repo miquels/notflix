@@ -1,6 +1,9 @@
 <template>
 <thumb-wall
     :items="items"
+    :sort="sort"
+    :search="search"
+    :genre="genre"
     :thumbSize="thumbSize"
     :scrollbarWidth="scrollbarWidth"
     :focus="focus"

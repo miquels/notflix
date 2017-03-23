@@ -38,7 +38,8 @@ export default {
     thumbSize: { type: Number, default: 1 },
     scrollbarWidth: { type: Number, default: 0 },
     genre: { type: Array, default: () => [] },
-    search: { type: String, default: '' }
+    search: { type: String, default: '' },
+    sort: { type: String, default: '' }
   },
 
   data: () => ({
