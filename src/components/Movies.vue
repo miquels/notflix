@@ -12,7 +12,7 @@ import { mapState } from 'vuex'
 
 import ThumbWall from './ThumbWall'
 import PosterRow from './PosterRow'
-import PosterRowHeader from './PosterRowHeader'
+import RowHeader from './RowHeader'
 import MovieInfo from './MovieInfo'
 
 const renderers = {
@@ -25,7 +25,7 @@ const renderers = {
     infoHeight: 20
   },
   header: {
-    component: PosterRowHeader,
+    component: RowHeader,
     height: [ 40, 60, 60 ]
   },
   panel: {
