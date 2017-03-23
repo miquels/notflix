@@ -6,7 +6,6 @@
     :genre="genre"
     :thumbSize="thumbSize"
     :scrollbarWidth="scrollbarWidth"
-    :focus="focus"
     :renderers="renderers" />
 </template>
 
@@ -52,7 +51,6 @@ export default {
 
   data: () => ({
     renderers: Object.freeze(renderers),
-    focus: null,
     panel: null,
     thumbSize: null,
     items: []
@@ -73,21 +71,7 @@ export default {
     // console.log('movies mounted called done')
   },
 
-  computed: mapState([ 'api', 'thumbSize', 'panel', 'scrollbarWidth' ]),
-
-  watch: {
-    panel (pn) {
-      if (pn) {
-        this.focus = {
-          key: pn.rowKey,
-          offset: pn.rowOffset,
-          intoView: 'pn_' + this.generation
-        }
-      } else {
-        this.focus = null
-      }
-    }
-  }
+  computed: mapState([ 'api', 'thumbSize', 'panel', 'scrollbarWidth' ])
 }
 </script>
 
