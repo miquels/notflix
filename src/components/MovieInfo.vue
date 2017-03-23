@@ -3,8 +3,8 @@
 <div class="movie-info__right" :style="rightStyle">
   <div class="movie-info__play">
     <div class="movie-info__playicons">
-      <i class="material-icons movie-info__play-fsicon" @click="play(true)">fullscreen</i>
       <i class="material-icons movie-info__play-arrowicon">play_arrow</i>
+      <i class="material-icons movie-info__play-fsicon" @click="play(true)">fullscreen</i>
       <i class="material-icons movie-info__play-circleicon" @click="play()">play_circle_outline</i>
       <i class="material-icons movie-info__play-infoicon">info_outline</i>
     </div>
@@ -94,7 +94,7 @@ export default {
     },
     imgUrl () {
       let query = `?w=${this.context.imgWidth}&h=${this.context.height}&q=70`
-      return this.movieInfo.url + query
+      return this.panel.url + query
     },
     title () {
       let title = this.items.name
@@ -163,14 +163,14 @@ export default {
       }
       return s.join(', ')
     },
-    ...mapState([ 'movieInfo', 'api', 'apiURL' ])
+    ...mapState([ 'panel', 'api', 'apiURL' ])
   },
   mounted () {
     this.updateItemNfo()
   },
   methods: {
     bgUrl () {
-      let m = this.movieInfo
+      let m = this.panel
       let img = m.fanart || m.poster
       if (img) {
         let url = joinpath(this.apiURL, m.baseurl, m.path, img)
@@ -220,7 +220,7 @@ export default {
       this.video = this.items
     },
     close () {
-      this.$store.commit('MOVIE_INFO', null)
+      this.$store.commit('PANEL', null)
     }
   }
 }
@@ -298,7 +298,7 @@ export default {
 .movie-info__play {
   display: flex;
   position: absolute;
-  left: 0; right: 0; top: 0; bottom: 0;
+  left: 0; right: 0; bottom: 0;
   align-items: center;
   justify-content: center;
   text-shadow: 0px 0px 10px #000;
@@ -311,23 +311,23 @@ export default {
 }
 .movie-info__play-fsicon {
   font-size: 80px !important;
-  position: absolute;
-  left: -20px;
   cursor: pointer;
+  margin: 10px;
 }
 .movie-info__play-arrowicon {
+  position: absolute;
+  cursor: pointer;
+  left: 30px;
   font-size: 40px !important;
-  margin-right: 10px;
 }
 .movie-info__play-circleicon {
   font-size: 64px !important;
-  margin-left: 10px;
-  margin-right: 10px;
+  margin: 10px;
   cursor: pointer;
 }
 .movie-info__play-infoicon {
   font-size: 64px !important;
-  margin-left: 10px;
+  margin: 10px;
   cursor: pointer;
 }
 .movie-info__player {

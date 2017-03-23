@@ -46,8 +46,8 @@ export default {
         height: this.context.imgHeight + 'px'
       }
     },
-    movieInfo () {
-      return this.$store.state.movieInfo
+    panel () {
+      return this.$store.state.panel
     }
   },
   created () {
@@ -73,29 +73,29 @@ export default {
         width: this.context.imgWidth + 'px',
         height: this.context.imgHeight + 20 + 'px'
       }
-      if (this.movieInfo && this.movieInfo.name === item.name) {
+      if (this.panel && this.panel.name === item.name) {
         r.borderColor = '#f0f0f0'
       }
       return r
     },
-    setMovieInfo (item) {
+    setPanel (item) {
       let rowKey = this.rowKey
       let rowOffset = this.$parent.getOffset(rowKey)
       let newItem = Object.assign({ rowKey, rowOffset, url: item.url }, item.m)
-      this.$store.commit('MOVIE_INFO', newItem)
+      this.$store.commit('PANEL', newItem)
     },
     click (item) {
-      if (this.movieInfo === null || this.movieInfo.name !== item.name) {
-        this.setMovieInfo(item)
+      if (this.panel === null || this.panel.name !== item.name) {
+        this.setPanel(item)
       }
     },
     mouse (item) {
       if (this.$store.state.videoPlaying) {
         return
       }
-      if (this.movieInfo && this.movieInfo.name !== item.name) {
-        if (this.movieInfo.rowKey === this.rowKey) {
-          this.setMovieInfo(item)
+      if (this.panel && this.panel.name !== item.name) {
+        if (this.panel.rowKey === this.rowKey) {
+          this.setPanel(item)
         }
       }
     }

@@ -72,7 +72,7 @@ export default {
         if (this.renderers[r].component) {
           this.rComponent[r] = this.renderers[r].component
           this.rHeight[r] = this.renderers[r].height || this.itemHeight
-          this.rContext[r] = this.renderers[r].context || {}
+          this.rContext[r] = this.renderers[r] || {}
         } else {
           this.rComponent[r] = this.renderers[r]
           this.rHeight[r] = this.itemHeight

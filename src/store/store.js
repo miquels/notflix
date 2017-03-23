@@ -16,8 +16,9 @@ const state = {
   sidebar: false,
   fullscreen: isFullscreen(),
   posterSize: 1,
+  thumbSize: 1,
   collection: '',
-  movieInfo: null,
+  panel: null,
   scrollbarWidth: 0,
   videoFullscreen: false,
   videoPlaying: false,
@@ -38,8 +39,8 @@ const mutations = {
   POSTER_HOVER (state, obj) {
     state.posterHover = obj
   },
-  MOVIE_INFO (state, item) {
-    state.movieInfo = item
+  PANEL (state, item) {
+    state.panel = item
   },
   COLLECTION (state, coll) {
     state.collection = coll
