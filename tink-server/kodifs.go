@@ -15,11 +15,17 @@ import (
 
 var isVideo = regexp.MustCompile(`^(.*)\.(divx|mov|mp4|MP4|m4u|m4v)$`)
 var isImage = regexp.MustCompile(`^(.+)\.(jpg|jpeg|png|tbn)$`)
+var isImageExt = regexp.MustCompile(`^(jpg|jpeg|png|tbn)$`)
 var isSeasonImg = regexp.MustCompile(`^season([0-9]+)-?([a-z]+|)\.(jpg|jpeg|png|tbn)$`)
 var isShowSubdir = regexp.MustCompile(`^S([0-9]+)|Specials([0-9]*)$`)
 var isExt1 = regexp.MustCompile(`^(.*)()\.(png|jpg|jpeg|tbn|nfo|srt)$`)
 var isExt2 = regexp.MustCompile(`^(.*)[.-]([a-z]+)\.(png|jpg|jpeg|tbn|nfo|srt)$`)
 var isYear = regexp.MustCompile(` \(([0-9]+)\)$`)
+
+type epMapType struct {
+	eps	*[]Episode
+	idx	int
+}
 
 func escapePath(p string) string {
 	u := url.URL{ Path: p }
@@ -230,11 +236,14 @@ func getSeason(show *Item, seasonNo int) (s *Season) {
 	return
 }
 
-func epMatch(epMap map[string]*Episode, s []string) (ep *Episode, aux, ext string) {
+func epMatch(epMap map[string]epMapType, s []string) (ep *Episode, aux, ext string) {
 	if len(s) < 4 {
 		return
 	}
-	ep, _ = epMap[s[1]]
+        epx, ok := epMap[s[1]]; if !ok {
+		return
+	}
+	ep = &(*epx.eps)[epx.idx]
 	aux = s[2]
 	ext = s[3]
 	return
@@ -253,8 +262,7 @@ func showScanDir(baseDir string, dir string, seasonHint int, show *Item) {
 		return
 	}
 
-	episodes := make([]*Episode, 0)
-	epMap := make(map[string]*Episode)
+	epMap := make(map[string]epMapType)
 
 	for _, f := range fi {
 		fn := f.Name()
@@ -347,9 +355,11 @@ func showScanDir(baseDir string, dir string, seasonHint int, show *Item) {
 				season := getSeason(show, ep.SeasonNo)
 				season.Episodes =
 					append(season.Episodes, ep)
-				epp := &(season.Episodes[len(season.Episodes)-1])
-				epMap[s[1]] = epp
-				episodes = append(episodes, epp)
+				epIndex := len(season.Episodes) - 1
+				epMap[s[1]] = epMapType{
+					eps: &season.Episodes,
+					idx: epIndex,
+				}
 			}
 		}
 	}
@@ -369,7 +379,7 @@ func showScanDir(baseDir string, dir string, seasonHint int, show *Item) {
 		}
 		p := escapePath(path.Join(dir, name))
 
-		if isImage.MatchString(ext) {
+		if isImageExt.MatchString(ext) {
 			if ext == "tbn" && aux == "" {
 				aux = "thumb"
 			}

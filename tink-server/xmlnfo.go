@@ -62,13 +62,23 @@ type VideoDetails struct {
 	Height		int		`xml:"height,omitempty" json:"height,omitempty"`
 }
 
-func decodeNfo(r io.Reader) (nfo *Nfo) {
+func decodeNfo(r io.ReadSeeker) (nfo *Nfo) {
+	// this is a really dirty hack to partially support <xbmcmultiepisode>
+	// for now. It just skips the tag and as a result parses just
+	// the first episode in the multiepisode list.
+	buf := make([]byte, 18, 18)
+	n, err := r.Read(buf)
+	if n != 18 || string(buf) != "<xbmcmultiepisode>" {
+		r.Seek(0, 0)
+	}
+
 	data := &Nfo{}
 	d := xml.NewDecoder(r)
 	d.Strict = false
 	d.AutoClose = xml.HTMLAutoClose
 	d.Entity = xml.HTMLEntity
-	err := d.Decode(data)
+
+	err = d.Decode(data)
 	// fmt.Printf("data: %+v\nxmlData: %s\n", data, string(xmlData))
 	if err != nil {
 		fmt.Println("Error unmarshalling from XML %v, %v", err, nfo)

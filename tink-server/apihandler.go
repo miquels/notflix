@@ -108,6 +108,9 @@ func itemHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "404 Not Found", http.StatusNotFound)
 		return
 	}
+
+	// decode base NFO into a copy of `item' because we don't want the
+	// nfo details to hang around in memory.
 	i2 := *i
 	if i2.NfoPath != "" {
 		file, err := os.Open(i2.NfoPath)
@@ -116,6 +119,24 @@ func itemHandler(w http.ResponseWriter, r *http.Request) {
 			file.Close()
 		}
 	}
+
+	// In case of a tvshow, do a deep copy and decode episode NFO
+	copy(i2.Seasons, i.Seasons)
+	for si := range i2.Seasons {
+		copy(i2.Seasons[si].Episodes, i.Seasons[si].Episodes)
+		for ei := range i2.Seasons[si].Episodes {
+			ep := i2.Seasons[si].Episodes[ei]
+			if ep.NfoPath != "" {
+				file, err := os.Open(ep.NfoPath)
+				if err == nil {
+					ep.Nfo = decodeNfo(file)
+					file.Close()
+					i2.Seasons[si].Episodes[ei] = ep
+				}
+			}
+		}
+	}
+
 	serveJSON(&i2, w)
 }
 
