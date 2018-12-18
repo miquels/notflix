@@ -1,8 +1,8 @@
-
 package main
 
 import (
 	"fmt"
+	"gopkg.in/gographics/imagick.v2/imagick"
 	"net/http"
 	"net/url"
 	"os"
@@ -10,7 +10,6 @@ import (
 	"strconv"
 	"sync"
 	"syscall"
-	"gopkg.in/gographics/imagick.v2/imagick"
 )
 
 var resizeMutexMap = make(map[string]*sync.Mutex)
@@ -168,7 +167,7 @@ func OpenFile(rw http.ResponseWriter, rq *http.Request, name string) (file http.
 	if ctype == "tbn" || ctype == "jpeg" {
 		ctype = "jpg"
 	}
-	rw.Header().Set("Content-Type", "image/" + ctype)
+	rw.Header().Set("Content-Type", "image/"+ctype)
 
 	// do we want to resize.
 	if rq.Method != "GET" || rq.URL.RawQuery == "" {
@@ -182,7 +181,7 @@ func OpenFile(rw http.ResponseWriter, rq *http.Request, name string) (file http.
 	w := param2float(params, "w")
 	h := param2float(params, "h")
 	q := param2float(params, "q")
-	if mw + mh + w + h + q == 0 {
+	if mw+mh+w+h+q == 0 {
 		return
 	}
 
@@ -231,7 +230,7 @@ func OpenFile(rw http.ResponseWriter, rq *http.Request, name string) (file http.
 			w = h * ar
 		}
 		// calculate height if not set
-		if h == 0 && w > 0{
+		if h == 0 && w > 0 {
 			h = w / ar
 		}
 		if w == 0 && h == 0 {
@@ -241,10 +240,10 @@ func OpenFile(rw http.ResponseWriter, rq *http.Request, name string) (file http.
 
 		// calculate both max width and max height.
 		if mw != 0 || mh != 0 {
-			if mh == 0 || (mw > 0 && mh * ar > mw) {
+			if mh == 0 || (mw > 0 && mh*ar > mw) {
 				mh = mw / ar
 			}
-			if mw == 0 || (mh > 0 && mw / ar > mh) {
+			if mw == 0 || (mh > 0 && mw/ar > mh) {
 				mw = mh * ar
 			}
 		}
@@ -333,4 +332,3 @@ func OpenFile(rw http.ResponseWriter, rq *http.Request, name string) (file http.
 	file = f
 	return
 }
-

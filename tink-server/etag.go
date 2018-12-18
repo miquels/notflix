@@ -1,26 +1,26 @@
 package main
 
 import (
-	"fmt"
-	"strings"
-	"syscall"
 	"crypto/md5"
 	"encoding/hex"
+	"fmt"
 	"net/http"
+	"strings"
+	"syscall"
 )
 
 func checkEtag(rw http.ResponseWriter, rq *http.Request, file http.File) bool {
 	// create ETag based on name, inode number, and timestamp.
-        fi, err := file.Stat()
-        if err != nil {
-                return false
-        }
-        stat, ok := fi.Sys().(*syscall.Stat_t)
-        if !ok {
-                return false
-        }
+	fi, err := file.Stat()
+	if err != nil {
+		return false
+	}
+	stat, ok := fi.Sys().(*syscall.Stat_t)
+	if !ok {
+		return false
+	}
 	s := fmt.Sprintf("%s.%d.%d", rq.RequestURI,
-			stat.Ino, fi.ModTime().Unix())
+		stat.Ino, fi.ModTime().Unix())
 	m := md5.Sum([]byte(s))
 	etag := hex.EncodeToString(m[:])
 
@@ -36,4 +36,3 @@ func checkEtag(rw http.ResponseWriter, rq *http.Request, file http.File) bool {
 	}
 	return false
 }
-

@@ -78,5 +78,3 @@ func parseEpisodeName(name string, seasonHint int, ep *Episode) (ok bool) {
 	ok = false
 	return
 }
-
-
