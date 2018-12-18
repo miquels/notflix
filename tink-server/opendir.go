@@ -107,7 +107,7 @@ func (fi *FileInfo) Createtime() (t time.Time) {
 		if !ok {
 			return
 		}
-		fi.createtime = syscall.TimespecToNsec(stat.Ctimespec)
+		fi.createtime = syscall.TimespecToNsec(stat.Ctim)
 	}
 	t = time.Unix(0, fi.createtime)
 	return

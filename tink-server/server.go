@@ -161,6 +161,7 @@ func main() {
 	s.HandleFunc("/collections", collectionsHandler)
 	s.HandleFunc("/collection/{coll}", collectionHandler)
 	s.HandleFunc("/collection/{coll}/genres", genresHandler)
+	s.HandleFunc("/collection/{coll}/studios", studiosHandler)
 	s.Handle("/collection/{coll}/items",
 		gzip(http.HandlerFunc(itemsHandler)))
 	s.Handle("/collection/{coll}/item/{item}",

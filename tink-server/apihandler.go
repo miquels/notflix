@@ -167,3 +167,41 @@ func genresHandler(w http.ResponseWriter, r *http.Request) {
 
 	serveJSON(gc, w)
 }
+
+type ItemList struct {
+	Name  string `json:"name"`
+	Label string `json:"label"`
+	Value string `json:"value"`
+}
+
+func studiosHandler(w http.ResponseWriter, r *http.Request) {
+	if preCheck(w, r, "coll") {
+		return
+	}
+	vars := mux.Vars(r)
+	c := getCollection(vars["coll"])
+	if c == nil {
+		http.Error(w, "404 Not Found", http.StatusNotFound)
+		return
+	}
+
+	gc := make(map[string]int)
+	for i := range c.Items {
+		g := c.Items[i].Studio
+		if v, found := gc[g]; !found {
+			gc[g] = 1
+		} else {
+			gc[g] = v + 1
+		}
+	}
+
+	var ret []ItemList
+	for key, count := range gc {
+		ret = append(ret, ItemList{
+			Name:  "studio",
+			Label: fmt.Sprintf("%s (%d)", key, count),
+			Value: key})
+	}
+
+	serveJSON(ret, w)
+}

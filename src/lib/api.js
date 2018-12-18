@@ -78,6 +78,10 @@ export default class API {
     return this.getObject(joinpath('/api/collection', collName))
   }
 
+  getStudios (collName) {
+    return this.getObject(joinpath('/api/collection', collName, 'studios'))
+  }
+
   getItems (collName) {
     return this.getObject(joinpath('/api/collection', collName, 'items'))
   }

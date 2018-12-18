@@ -38,6 +38,7 @@ export default {
     thumbSize: { type: Number, default: 1 },
     scrollbarWidth: { type: Number, default: 0 },
     genre: { type: Array, default: () => [] },
+    studios: { type: Array, default: () => [] },
     search: { type: String, default: '' },
     sort: { type: String, default: '' }
   },
@@ -97,6 +98,10 @@ export default {
       this.rebuildScrollItems()
     },
 
+    studios () {
+      this.rebuildScrollItems()
+    },
+
     search () {
       this.debouncedSearch()
     }
@@ -149,6 +154,7 @@ export default {
       console.log('rebuildScrollItems start')
       let items = this.items.slice()
       items = this.filterGenre(items)
+      items = this.filterStudio(items)
       items = this.filterSearch(items)
       this.sortedScrollItems = this.doSort(items)
       // console.log('this.rebuildScrollItems: sortedScrollItems', this.sortedScrollItems)
@@ -224,6 +230,23 @@ export default {
         }
       }
       this.scrollItems = scrollItems
+    },
+
+    filterStudio (items) {
+      if (this.studios && this.studios.length > 0) {
+        let res = []
+        for (let i = 0; i < items.length; i++) {
+          let m = items[i]
+          for (let g in this.studios) {
+            if (m.studio === this.studios[g]) {
+              res.push(m)
+              break
+            }
+          }
+        }
+        items = res
+      }
+      return items
     },
 
     filterGenre (items) {
