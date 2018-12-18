@@ -286,6 +286,30 @@ export default {
       return items
     },
 
+    sortByStudio (items) {
+      // set sortName and header
+      for (let m in items) {
+        let n = items[m].studio.toLowerCase()
+        items[m].sortName = n
+        items[m].header = items[m].studio + ''
+      }
+
+      // sort on header || sortName
+      items.sort((a, b) => {
+        let aa, bb
+        if (a.header !== b.header) {
+          bb = a.header
+          aa = b.header
+        } else {
+          aa = a.sortName
+          bb = b.sortName
+        }
+        return aa < bb ? -1 : (aa > bb ? 1 : 0)
+      })
+
+      return items
+    },
+
     sortByYear (items) {
       // set sortName and header
       for (let m in items) {
@@ -441,6 +465,9 @@ export default {
           break
         case 'rating':
           items = this.sortByRating(items)
+          break
+        case 'studio':
+          items = this.sortByStudio(items)
           break
         case 'year':
         default:

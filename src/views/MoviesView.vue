@@ -57,6 +57,7 @@ export default {
         { label: 'Year', name: 'sort', value: 'year' },
         { label: 'Name', name: 'sort', value: 'name' },
         { label: 'Rating', name: 'sort', value: 'rating' },
+        { label: 'Studio', name: 'sort', value: 'studio' },
         { label: 'Added', name: 'sort', value: 'added' },
         { label: 'Updated', name: 'sort', value: 'updated' }
       ],

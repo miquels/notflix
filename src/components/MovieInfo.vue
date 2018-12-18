@@ -29,6 +29,9 @@
   <div class="movie-info__grey" v-if="genres">
     Genres: <span class="movie-info__white">{{genres}}</span>
   </div>
+  <div class="movie-info__grey">
+    Studio: <span class="movie-info__white">{{items.studio}}</span>
+  </div>
   <div class="movie-info__plot movie-info__grey" v-if="subs">
     Subtitles: {{subs}}
   </div>

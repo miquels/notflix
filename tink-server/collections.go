@@ -36,6 +36,7 @@ type Item struct {
 	Votes       int      `json:"votes,omitempty"`
 	Genre       []string `json:"genre,omitempty"`
 	Genrestring string   `json:"-"`
+	Studio      string   `json:"studio,omitempty"`
 	Year        int      `json:"year,omitempty"`
 
 	// movie
