@@ -8,7 +8,6 @@ import (
 	"errors"
 	"os"
 	"path"
-	"syscall"
 	"time"
 )
 
@@ -93,24 +92,6 @@ func (fi *FileInfo) Mode() os.FileMode {
 func (fi *FileInfo) Modtime() time.Time {
 	fi.stat()
 	return fi.modtime
-}
-
-func (fi *FileInfo) Createtime() (t time.Time) {
-	if fi.createtime == 0 {
-		p := path.Join(fi.dir.name, fi.name)
-		s, err := os.Stat(p)
-		if err != nil {
-			return
-		}
-		fi.set(s)
-		stat, ok := s.Sys().(*syscall.Stat_t)
-		if !ok {
-			return
-		}
-		fi.createtime = syscall.TimespecToNsec(stat.Ctim)
-	}
-	t = time.Unix(0, fi.createtime)
-	return
 }
 
 func (fi *FileInfo) CreatetimeMS() int64 {
