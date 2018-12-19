@@ -312,17 +312,20 @@ export default {
     sortByStudio (items) {
       // set sortName and header
       for (let m in items) {
-        let n = items[m].studio.toLowerCase()
-        items[m].sortName = n
-        items[m].header = items[m].studio + ''
+        let studio = (items[m].studio || '**Unknown**')
+        if (studio.toLowerCase().substring(0, 4) === 'the ') {
+          studio = studio.substring(4)
+        }
+        items[m].sortName = studio.toLowerCase()
+        items[m].header = studio
       }
 
       // sort on header || sortName
       items.sort((a, b) => {
         let aa, bb
         if (a.header !== b.header) {
-          bb = a.header
-          aa = b.header
+          aa = a.header
+          bb = b.header
         } else {
           aa = a.sortName
           bb = b.sortName
