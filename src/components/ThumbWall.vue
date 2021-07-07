@@ -38,6 +38,7 @@ export default {
     thumbSize: { type: Number, default: 1 },
     scrollbarWidth: { type: Number, default: 0 },
     genre: { type: Array, default: () => [] },
+    studios: { type: Array, default: () => [] },
     search: { type: String, default: '' },
     sort: { type: String, default: '' }
   },
@@ -97,6 +98,10 @@ export default {
       this.rebuildScrollItems()
     },
 
+    studios () {
+      this.rebuildScrollItems()
+    },
+
     search () {
       this.debouncedSearch()
     }
@@ -149,6 +154,7 @@ export default {
       console.log('rebuildScrollItems start')
       let items = this.items.slice()
       items = this.filterGenre(items)
+      items = this.filterStudio(items)
       items = this.filterSearch(items)
       this.sortedScrollItems = this.doSort(items)
       // console.log('this.rebuildScrollItems: sortedScrollItems', this.sortedScrollItems)
@@ -226,6 +232,23 @@ export default {
       this.scrollItems = scrollItems
     },
 
+    filterStudio (items) {
+      if (this.studios && this.studios.length > 0) {
+        let res = []
+        for (let i = 0; i < items.length; i++) {
+          let m = items[i]
+          for (let g in this.studios) {
+            if (m.studio === this.studios[g]) {
+              res.push(m)
+              break
+            }
+          }
+        }
+        items = res
+      }
+      return items
+    },
+
     filterGenre (items) {
       // console.log('filterGenre items genre', items, this.genre)
       if (this.genre && this.genre.length > 0) {
@@ -283,6 +306,33 @@ export default {
         let bb = b.sortName
         return aa < bb ? -1 : (aa > bb ? 1 : 0)
       })
+      return items
+    },
+
+    sortByStudio (items) {
+      // set sortName and header
+      for (let m in items) {
+        let studio = (items[m].studio || '**Unknown**')
+        if (studio.toLowerCase().substring(0, 4) === 'the ') {
+          studio = studio.substring(4)
+        }
+        items[m].sortName = studio.toLowerCase()
+        items[m].header = studio
+      }
+
+      // sort on header || sortName
+      items.sort((a, b) => {
+        let aa, bb
+        if (a.header !== b.header) {
+          aa = a.header
+          bb = b.header
+        } else {
+          aa = a.sortName
+          bb = b.sortName
+        }
+        return aa < bb ? -1 : (aa > bb ? 1 : 0)
+      })
+
       return items
     },
 
@@ -441,6 +491,9 @@ export default {
           break
         case 'rating':
           items = this.sortByRating(items)
+          break
+        case 'studio':
+          items = this.sortByStudio(items)
           break
         case 'year':
         default:

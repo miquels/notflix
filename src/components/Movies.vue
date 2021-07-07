@@ -4,6 +4,7 @@
     :sort="sort"
     :search="search"
     :genre="genre"
+    :studios="studios"
     :thumbSize="thumbSize"
     :scrollbarWidth="scrollbarWidth"
     :renderers="renderers" />
@@ -46,7 +47,8 @@ export default {
     collection: String,
     sort: String,
     search: String,
-    genre: { type: Array, default: [] }
+    genre: { type: Array, default: [] },
+    studios: { type: Array, default: [] }
   },
 
   data: () => ({
@@ -68,7 +70,6 @@ export default {
       console.log('getmovies promise callback, builditems')
       this.items = Object.freeze(movies)
     })
-    // console.log('movies mounted called done')
   },
 
   computed: mapState([ 'api', 'thumbSize', 'panel', 'scrollbarWidth' ])

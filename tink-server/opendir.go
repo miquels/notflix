@@ -1,36 +1,35 @@
 //
 //	OpenDir is like Open(), but the Readdir() os.FileInfo
 //	results are lazy-loaded.
-//	
+//
 package main
 
 import (
 	"errors"
 	"os"
 	"path"
-	"syscall"
 	"time"
 )
 
 type Dir struct {
-	name	string
-	file	*os.File
+	name string
+	file *os.File
 }
 
 type FileInfo struct {
-	dir	*Dir
-	name	string
-	size	int64
-	mode	os.FileMode
-	modtime	time.Time
+	dir        *Dir
+	name       string
+	size       int64
+	mode       os.FileMode
+	modtime    time.Time
 	createtime int64
-	isdir	bool
-	didstat	bool
+	isdir      bool
+	didstat    bool
 }
 
 var NotDirectory = errors.New("Not a directory")
 
-func OpenDir(name string) (dir  *Dir, err error) {
+func OpenDir(name string) (dir *Dir, err error) {
 	f, err := os.Open(name)
 	if err != nil {
 		return
@@ -38,9 +37,9 @@ func OpenDir(name string) (dir  *Dir, err error) {
 	fi, _ := f.Stat()
 	if !fi.IsDir() {
 		err = &os.PathError{
-			Op: "Opendir",
+			Op:   "Opendir",
 			Path: name,
-			Err: NotDirectory,
+			Err:  NotDirectory,
 		}
 		return
 	}
@@ -95,24 +94,6 @@ func (fi *FileInfo) Modtime() time.Time {
 	return fi.modtime
 }
 
-func (fi *FileInfo) Createtime() (t time.Time) {
-	if fi.createtime == 0 {
-		p := path.Join(fi.dir.name, fi.name)
-		s, err := os.Stat(p)
-		if err != nil {
-			return
-		}
-		fi.set(s)
-		stat, ok := s.Sys().(*syscall.Stat_t)
-		if !ok {
-			return
-		}
-		fi.createtime = syscall.TimespecToNsec(stat.Ctimespec)
-	}
-	t = time.Unix(0, fi.createtime)
-	return
-}
-
 func (fi *FileInfo) CreatetimeMS() int64 {
 	fi.Createtime()
 	return fi.createtime / 1000000
@@ -145,8 +126,6 @@ func (fi *FileInfo) set(s os.FileInfo) {
 	return
 }
 
-
 func (fi *FileInfo) Sys() interface{} {
 	return nil
 }
-
