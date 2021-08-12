@@ -23,7 +23,7 @@ type FileInfo struct {
 	size	int64
 	mode	os.FileMode
 	modtime	time.Time
-	createtime int64
+	createtime time.Time
 	isdir	bool
 	didstat	bool
 }
@@ -96,7 +96,7 @@ func (fi *FileInfo) Modtime() time.Time {
 }
 
 func (fi *FileInfo) Createtime() (t time.Time) {
-	if fi.createtime == 0 {
+	if fi.createtime.IsZero() {
 		p := path.Join(fi.dir.name, fi.name)
 		s, err := os.Stat(p)
 		if err != nil {
@@ -107,15 +107,19 @@ func (fi *FileInfo) Createtime() (t time.Time) {
 		if !ok {
 			return
 		}
-		fi.createtime = syscall.TimespecToNsec(stat.Ctimespec)
+		nsec := syscall.TimespecToNsec(stat.Ctimespec)
+		fi.createtime = time.Unix(0, nsec)
+		if fi.modtime.Before(fi.createtime) {
+			fi.createtime = fi.modtime
+		}
 	}
-	t = time.Unix(0, fi.createtime)
+	t = fi.createtime
 	return
 }
 
 func (fi *FileInfo) CreatetimeMS() int64 {
 	fi.Createtime()
-	return fi.createtime / 1000000
+	return fi.createtime.UnixNano() / 1000000
 }
 
 func (fi *FileInfo) IsDir() bool {
