@@ -120,15 +120,25 @@ func buildMovie(coll *Collection, dir string) (movie *Item) {
 	for _, f := range fi {
 		name := f.Name()
 
+		var aux string;
+		var ext string;
 		s := isExt1.FindStringSubmatch(name)
+		if len(s) > 0 {
+			ext = s[3]
+			if s[1] != base {
+				aux = s[1]
+			}
+		}
 		if len(s) == 0 || s[1] != base {
 			s = isExt2.FindStringSubmatch(name)
+			if len(s) > 0 && s[1] == base {
+				aux = s[2]
+				ext = s[3]
+			}
 		}
-		if len(s) == 0 || s[1] != base {
+		if ext == "" {
 			continue
 		}
-		aux := s[2]
-		ext := s[3]
 		p := escapePath(name)
 
 		if isImage.MatchString(name) {
